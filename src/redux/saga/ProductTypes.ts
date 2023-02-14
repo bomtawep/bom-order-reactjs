@@ -23,7 +23,7 @@ export const getProductTypes = () => {
         }
     }
 }
-export const postProductType = (payload: any, navi: any) => {
+export const postProductType = (payload: any) => {
     const { name, is_active } = payload
     return async (dispatch: Dispatch<Action>) => {
         dispatch({
@@ -86,14 +86,15 @@ export const getProductType = (payload: any) => {
         }
     }
 }
-export const updateProductType = (payload: any, navi: string) => {
+export const updateProductType = (payload: any) => {
     const { id, name, is_active } = payload
+    let response: any
     return async (dispatch: Dispatch<Action>) => {
         dispatch({
             type: ActionType.PRODUCT_TYPE_PENDING
         });
         try {
-            const response = await axios.put(`${API_HOST}/api/product-type/product-type/${id}`, {
+            response = await axios.put(`${API_HOST}/api/product-type/product-type/${id}`, {
                 'name': name,
                 'is_active': is_active
             });
@@ -101,6 +102,7 @@ export const updateProductType = (payload: any, navi: string) => {
                 type: ActionType.PRODUCT_TYPE_SUCCESS,
                 payload: response.data
             });
+            console.log('Scccc')
             //window.location.href = navi
         } catch(err: any) {
             dispatch({
