@@ -1,8 +1,8 @@
 FROM node:16-alpine 
-WORKDIR /app
+WORKDIR /usr/src/app
 COPY . .
 RUN yarn install
 #RUN yarn run build:production
 
 EXPOSE 8081
-CMD npm run start
+CMD yarn start
