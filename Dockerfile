@@ -1,8 +1,8 @@
 FROM node:16-alpine 
 WORKDIR /usr/src/app
 COPY . .
-RUN npm install
-RUN npm run build:production
+RUN yarn install
+RUN yarn run build:production
 
-EXPOSE 3000
+EXPOSE 8081
 CMD [ "npx", "serve", "build" ]
