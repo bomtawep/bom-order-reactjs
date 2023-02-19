@@ -5,4 +5,4 @@ RUN yarn install
 #RUN yarn run build:production
 
 EXPOSE 8081
-CMD [ "yarn", "start" ]
+CMD npm run start
