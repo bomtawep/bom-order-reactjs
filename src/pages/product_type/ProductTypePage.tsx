@@ -323,7 +323,7 @@ export default function ProductTypePage() {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const ProductTypes = useTypedSelector((state) => state.reducers.ProductTypes.ProductTypes);
+  const { ProductTypes } = useTypedSelector((state) => state.reducers.ProductTypes);
   const dispatch = useAppDispatch();
   
   useEffect(() => {

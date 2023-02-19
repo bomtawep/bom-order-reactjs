@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Dispatch } from 'redux';
 import { ActionType, Action } from '../actions/ProductTypes';
 
-const API_HOST = 'http://localhost:8080'
+const API_HOST = 'http://bom-order-nodejs-bomtawep-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com'
 export const getProductTypes = () => {
     return async (dispatch: Dispatch<Action>) => {
         dispatch({
@@ -10,7 +10,6 @@ export const getProductTypes = () => {
         });
         try {
             const { data } = await axios.get(`${API_HOST}/api/product-type/product-types`);
-            console.log('data',data.data)
             dispatch({
                 type: ActionType.PRODUCT_TYPE_SUCCESS,
                 payload: data.data
@@ -23,7 +22,7 @@ export const getProductTypes = () => {
         }
     }
 }
-export const postProductType = (payload: any, navi: any) => {
+export const postProductType = (payload: any, navi: string) => {
     const { name, is_active } = payload
     return async (dispatch: Dispatch<Action>) => {
         dispatch({
@@ -38,6 +37,7 @@ export const postProductType = (payload: any, navi: any) => {
                 type: ActionType.PRODUCT_TYPE_SUCCESS,
                 payload: response.data
             })
+            window.location.href = navi
         } catch(err: any) {
             dispatch({
                 type: ActionType.PRODUCT_TYPE_FAIL,
@@ -53,11 +53,11 @@ export const delProductType = (payload: [], navi: string) => {
         });
         try {
             await axios.delete(`${API_HOST}/api/product-type/product-type`, { data: { id: payload } });
-            window.location.href = navi
             dispatch({
                 type: ActionType.PRODUCT_TYPE_SUCCESS,
                 payload: []
             });
+            window.location.href = navi
         } catch(err: any) {
             dispatch({
                 type: ActionType.PRODUCT_TYPE_FAIL,
@@ -72,7 +72,6 @@ export const getProductType = (payload: any) => {
             type: ActionType.PRODUCT_TYPE_PENDING
         });
         try {
-            console.log('payload', payload)
             const { data } = await axios.get(`${API_HOST}/api/product-type/product-type/${payload}`);
             dispatch({
                 type: ActionType.PRODUCT_TYPE_1_SUCCESS,
@@ -88,12 +87,13 @@ export const getProductType = (payload: any) => {
 }
 export const updateProductType = (payload: any, navi: string) => {
     const { id, name, is_active } = payload
+    let response: any
     return async (dispatch: Dispatch<Action>) => {
         dispatch({
             type: ActionType.PRODUCT_TYPE_PENDING
         });
         try {
-            const response = await axios.put(`${API_HOST}/api/product-type/product-type/${id}`, {
+            response = await axios.put(`${API_HOST}/api/product-type/product-type/${id}`, {
                 'name': name,
                 'is_active': is_active
             });
@@ -101,7 +101,7 @@ export const updateProductType = (payload: any, navi: string) => {
                 type: ActionType.PRODUCT_TYPE_SUCCESS,
                 payload: response.data
             });
-            //window.location.href = navi
+            window.location.href = navi
         } catch(err: any) {
             dispatch({
                 type: ActionType.PRODUCT_TYPE_FAIL,

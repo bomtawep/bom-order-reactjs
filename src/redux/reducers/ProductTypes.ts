@@ -5,6 +5,7 @@ interface State {
     form: {};
     loading: boolean;
     error: string | null;
+    nav: boolean;
 }
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
     form: {},
     loading: false, 
     error: null,
+    nav: false
 }
 
 export const productTypeReducer = (state: State = initialState, action: Action):State => {
@@ -22,6 +24,7 @@ export const productTypeReducer = (state: State = initialState, action: Action):
                 form: {},
                 loading: true,
                 error: null,
+                nav: false
             } 
         case ActionType.PRODUCT_TYPE_SUCCESS:
             return {
@@ -29,6 +32,7 @@ export const productTypeReducer = (state: State = initialState, action: Action):
                 form: {},
                 loading: false,
                 error: null,
+                nav: true
             }
         case ActionType.PRODUCT_TYPE_1_SUCCESS:
             return {
@@ -36,6 +40,7 @@ export const productTypeReducer = (state: State = initialState, action: Action):
                 form: action.payload,
                 loading: false,
                 error: null,
+                nav: false
             }
         case ActionType.PRODUCT_TYPE_FAIL:
             return {
@@ -43,6 +48,7 @@ export const productTypeReducer = (state: State = initialState, action: Action):
                 form: {},
                 loading: false,
                 error: action.payload,
+                nav: false
             }
         default: 
             return state;
