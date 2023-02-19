@@ -37,7 +37,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "env-cmd -f .env.staging react-scripts start",
+    "start": "react-scripts start",
     "build:staging": "env-cmd -f .env.staging react-scripts build",
     "build:production": "react-scripts build",
     "test": "react-scripts test",
