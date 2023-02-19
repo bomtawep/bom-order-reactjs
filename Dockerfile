@@ -1,7 +1,12 @@
 FROM node:16-alpine 
-WORKDIR /usr/src/app
+WORKDIR /app
 COPY . .
-RUN sudo chown -R 1007260000:0 "/.npm"
+RUN groupadd non-root-postgres-group
+RUN useradd non-root-postgres-user --group non-root-postgres-group
+RUN chown -R non-root-postgres-user:non-root-postgres-group /app
+RUN chmod 777 /app
+USER non-root-postgres
+
 RUN yarn install
 RUN yarn run build:production
 
