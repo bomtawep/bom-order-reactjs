@@ -1,9 +1,9 @@
-FROM node:16.13.1-alpine3.14
-
+FROM node:16-alpine 
 WORKDIR /app
 COPY . .
+RUN npm ci 
+RUN npm run build:production
 ENV NODE_ENV production
-RUN npm install
 
-EXPOSE 8081
-CMD npm run start
+EXPOSE 3000
+CMD [ "npx", "serve", "build" ]
