@@ -15,17 +15,17 @@ import { useParams } from 'react-router-dom';
 import * as yup from "yup";
 import { Formik } from "formik";
 import Snackbar from '@mui/material/Snackbar';
-import { useNavigate } from 'react-router-dom';
-import routeLink from '../../routes/routeLink';
+//import { useNavigate } from 'react-router-dom';
+//import routeLink from '../../routes/routeLink';
 import Alert from '@mui/material/Alert';
 import Slide, { SlideProps } from '@mui/material/Slide';
 import { ActionType } from '../../redux/actions/ProductTypes';
 
 export default function ProductTypeFormPage() {
-  const { ProductTypes, form, loading, nav } = useTypedSelector((state) => state.reducers.ProductTypes);
+  const {form} = useTypedSelector((state) => state.reducers.ProductTypes);
   const params = useParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate()
+  //const navigate = useNavigate()
   const [open, setOpen] = React.useState(false)
   type TransitionProps = Omit<SlideProps, 'direction'>
   const [transition, setTransition] = React.useState<
@@ -79,23 +79,18 @@ export default function ProductTypeFormPage() {
             type: ActionType.PRODUCT_TYPE_SUCCESS,
             loading: true
         });
-          //const navi = '/product/product-type'
+          const navi = '/product/product-type'
           if (params.id !== undefined) {
             dispatch(
-              updateProductType(values)
+              updateProductType(values, navi)
             )
             console.log('Updateee')
           } else {
             dispatch(
-              postProductType(values)
+              postProductType(values, navi)
             )
             setTransition(() => TransitionLeft);
             setOpen(true);
-          }
-          if (nav !== true) {
-            console.log('Scccc2: ', ProductTypes)
-            console.log('Form: ', form)
-            navigate(routeLink.Product.ProductType)
           }
         }}
       >
