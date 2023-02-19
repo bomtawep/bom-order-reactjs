@@ -6,4 +6,4 @@ RUN yarn install
 RUN yarn run build:production
 
 EXPOSE 8081
-CMD [ "npx", "serve" ]
+CMD [ "yarn", "start" ]
