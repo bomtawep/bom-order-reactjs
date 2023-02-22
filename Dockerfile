@@ -5,7 +5,6 @@ COPY ./public ./public
 COPY ./src ./src
 RUN yarn install
 RUN yarn build:production
-RUN yarn start
 
 EXPOSE 8081
-#CMD ["yarn", "start"]
+CMD ["yarn", "start"]
