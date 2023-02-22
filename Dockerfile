@@ -1,10 +1,11 @@
 FROM node:16-alpine 
-WORKDIR /usr/src/app
+WORKDIR /bom-order-nodejs
 COPY ["package.json", "package-lock.json", "tsconfig.json", "./"]
 COPY ./public ./public
 COPY ./src ./src
 RUN yarn install
-RUN yarn global add react-scripts
+RUN yarn build:production
+RUN yarn start
 
 EXPOSE 8081
-CMD ["yarn", "start"]
+#CMD ["yarn", "start"]
