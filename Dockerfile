@@ -4,7 +4,7 @@ COPY ["package.json", "package-lock.json", "tsconfig.json", "./"]
 COPY ./public ./public
 COPY ./src ./src
 RUN yarn install
-RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
+RUN chmod -R 777 node_modules/.cache
 RUN yarn build:production
 
 EXPOSE 8081
