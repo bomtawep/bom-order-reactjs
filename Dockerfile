@@ -1,8 +1,9 @@
-FROM node:16-alpine 
-RUN mkdir -p /bom-order-reactjs
-RUN chown newuser /bom-order-reactjs
-USER newuser
-WORKDIR /bom-order-reactjs
+FROM alpine:3.16.2
+ 
+RUN addgroup --g 1000 groupcontainer
+RUN adduser -u 1000 -G groupcontainer -h /bom-order-reactjs -D containeruser
+ 
+USER containeruser
 
 COPY package.json .
 RUN yarn install
