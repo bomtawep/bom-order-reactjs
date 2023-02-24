@@ -1,4 +1,4 @@
-FROM alpine:3.16.2
+FROM node:16-alpine
  
 RUN addgroup --g 1000 groupcontainer
 RUN adduser -u 1000 -G groupcontainer -h /bom-order-reactjs -D containeruser
