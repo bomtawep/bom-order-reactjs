@@ -7,7 +7,7 @@ USER containeruser
 
 COPY package.json .
 COPY . .
-RUN yarn install
+RUN npm install
 
 EXPOSE 8081
-CMD ["yarn", "start"]
+CMD ["npm", "run", "start"]
