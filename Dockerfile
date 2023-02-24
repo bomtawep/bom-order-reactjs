@@ -1,7 +1,7 @@
 FROM node:16-alpine 
 WORKDIR /bom-order-reactjs
 COPY --chown=node:node package.json .
-RUN npm install
+RUN yarn install
 COPY --chown=node:node . .
 USER node
 
