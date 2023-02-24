@@ -1,9 +1,12 @@
 FROM node:16-alpine 
+RUN mkdir -p /bom-order-reactjs
+RUN chown newuser /bom-order-reactjs
+USER newuser
 WORKDIR /bom-order-reactjs
-COPY --chown=node:node package.json .
+
+COPY package.json .
 RUN yarn install
-COPY --chown=node:node . .
-USER node
+COPY . .
 
 EXPOSE 8081
 CMD ["yarn", "start"]
