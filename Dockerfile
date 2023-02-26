@@ -1,13 +1,12 @@
-FROM node:16-alpine
- 
-RUN addgroup --g 1000 groupcontainer
-RUN adduser -u 1000 -G groupcontainer -h /bom-order-reactjs -D containeruser
- 
-USER containeruser
+FROM node:14 as builder
+WORKDIR /usr/src/app
+COPY package.json yarn.lock ./
+RUN yarn
+COPY . ./
+RUN yarn build
 
-COPY package.json .
-COPY . .
-RUN npm install
-
-EXPOSE 8081
-CMD ["npm", "run", "start"]
+# Stage 2: Copy the JS React SPA into the Nginx HTML directory
+FROM bitnami/nginx:latest
+COPY --from=builder /usr/src/app/build /app
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]
