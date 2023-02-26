@@ -1,0 +1,230 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: react-web-app
+  namespace: bomtawep-dev
+  annotations:
+    iconClass: icon-jboss
+    tags: nodejs, react, web app
+    template.openshift.io/provider-display-name: "Red Hat, Inc."
+    description: Just building a little react app with a web builder
+parameters:
+  - name: APPLICATION_NAME
+    description: Name of the application
+    displayName: Application name
+    required: true
+    value: react-web-app
+  - name: SOURCE_REPOSITORY_URL
+    description: The source URL for the application
+    displayName: Source URL
+    required: true
+  - name: SOURCE_REPOSITORY_REF
+    description: The branch name for the application
+    displayName: Source Branch
+    value: master
+    required: true
+  - name: SOURCE_REPOSITORY_DIR
+    description: The location within the source repo of the application
+    displayName: Source Directory
+    value: .
+    required: true
+  - name: OUTPUT_DIR
+    description: The location of the compiled static files from your web apps builder
+    displayName: Output Directory
+    value: build
+    required: false
+  - name: GITHUB_WEBHOOK_SECRET
+    description: A secret string used to configure the GitHub webhook.
+    displayName: GitHub Webhook Secret
+    required: true
+    from: '[a-zA-Z0-9]{40}'
+    generate: expression
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    namespace: bomtawep-dev
+    name: ${APPLICATION_NAME}-builder
+  spec: {}
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    namespace: bomtawep-dev
+    name: ${APPLICATION_NAME}-runtime
+  spec: {}
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    namespace: bomtawep-dev
+    name: web-app-builder-runtime
+  spec:
+    tags:
+    - name: latest
+      from:
+        kind: DockerImage
+        name: nodeshift/centos7-s2i-web-app:10.x
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    namespace: bomtawep-dev
+    name: nginx-image-runtime
+  spec:
+    tags:
+    - name: latest
+      from:
+        kind: DockerImage
+        name: 'centos/nginx-112-centos7:latest'
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    namespace: bomtawep-dev
+    name: ${APPLICATION_NAME}-builder
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${APPLICATION_NAME}-builder:latest
+    postCommit: {}
+    resources: {}
+    source:
+      git:
+        uri: ${SOURCE_REPOSITORY_URL}
+        ref: ${SOURCE_REPOSITORY_REF}
+      contextDir: ${SOURCE_REPOSITORY_DIR}
+      type: Git
+    strategy:
+      sourceStrategy:
+        env:
+          - name: OUTPUT_DIR
+            value: ${OUTPUT_DIR}
+        from:
+          kind: ImageStreamTag
+          name: web-app-builder-runtime:latest
+        incremental: true
+      type: Source
+    triggers:
+    - github:
+        secret: ${GITHUB_WEBHOOK_SECRET}
+      type: GitHub
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+  status:
+    lastVersion: 0
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    namespace: bomtawep-dev
+    name: ${APPLICATION_NAME}-runtime
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${APPLICATION_NAME}-runtime:latest
+    postCommit: {}
+    resources: {}
+    source:
+      type: Image
+      images:
+        - from:
+            kind: ImageStreamTag
+            name: ${APPLICATION_NAME}-builder:latest
+          paths:
+            - destinationDir: .
+              sourcePath: /opt/app-root/output/.
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: nginx-image-runtime:latest
+        incremental: true
+      type: Source
+    triggers:
+    - github:
+        secret: ${GITHUB_WEBHOOK_SECRET}
+      type: GitHub
+    - type: ConfigChange
+    - type: ImageChange
+      imageChange: {}
+    - type: ImageChange
+      imageChange:
+        from:
+          kind: ImageStreamTag
+          name: ${APPLICATION_NAME}-builder:latest
+  status:
+    lastVersion: 0
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    namespace: bomtawep-dev
+    labels:
+      app: ${APPLICATION_NAME}
+    name: ${APPLICATION_NAME}
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      app: ${APPLICATION_NAME}
+    strategy:
+      rollingParams:
+        timeoutSeconds: 3600
+      type: Rolling
+    template:
+      metadata:
+        namespace: bomtawep-dev
+        labels:
+          app: ${APPLICATION_NAME}
+      spec:
+        containers:
+        - env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          image: ${APPLICATION_NAME}-runtime
+          imagePullPolicy: IfNotPresent
+          name: ${APPLICATION_NAME}-runtime
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+      metadata:
+        namespace: bomtawep-dev
+        labels:
+          app: ${APPLICATION_NAME}
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${APPLICATION_NAME}-runtime
+          from:
+            kind: ImageStreamTag
+            name: '${APPLICATION_NAME}-runtime:latest'
+- apiVersion: v1
+  kind: Service
+  metadata:
+    namespace: bomtawep-dev
+    labels:
+      app: ${APPLICATION_NAME}
+    name: ${APPLICATION_NAME}
+  spec:
+    ports:
+    - name: http
+      port: 8080
+    selector:
+      app: ${APPLICATION_NAME}
+- apiVersion: v1
+  kind: Route
+  metadata:
+    namespace: bomtawep-dev
+    labels:
+      app: ${APPLICATION_NAME}
+    name: ${APPLICATION_NAME}
+  spec:
+    port:
+      targetPort: 8080
+    to:
+      kind: Service
+      name: ${APPLICATION_NAME}
