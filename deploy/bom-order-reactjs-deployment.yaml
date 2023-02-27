@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yaml
+    kompose.version: 1.28.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: bom-order-reactjs
+  name: bom-order-reactjs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: bom-order-reactjs
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yaml
+        kompose.version: 1.28.0 (HEAD)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/deploy-default: "true"
+        io.kompose.service: bom-order-reactjs
+    spec:
+      containers:
+        - env:
+            - name: CHOKIDAR_USEPOLLING
+              value: "true"
+          image: bom-order-reactjs
+          name: react
+          ports:
+            - containerPort: 8081
+          resources: {}
+          volumeMounts:
+            - mountPath: /app
+              name: bom-order-reactjs-claim0
+            - mountPath: /app/node_modules
+              name: bom-order-reactjs-claim1
+      restartPolicy: Always
+      volumes:
+        - name: bom-order-reactjs-claim0
+          persistentVolumeClaim:
+            claimName: bom-order-reactjs-claim0
+        - name: bom-order-reactjs-claim1
+          persistentVolumeClaim:
+            claimName: bom-order-reactjs-claim1
+status: {}
