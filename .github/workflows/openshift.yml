@@ -116,3 +116,7 @@ jobs:
         image: ${{ steps.push-image.outputs.registry-path }}
         namespace: ${{ env.OPENSHIFT_NAMESPACE }}
         port: ${{ env.APP_PORT }}
+    #- name: Deploy kubernates react
+    #  run: |
+    #    oc apply -f ./deploy/react.yaml
+    #    oc expose svc/react
