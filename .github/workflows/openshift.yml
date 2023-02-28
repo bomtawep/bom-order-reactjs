@@ -107,7 +107,12 @@ jobs:
         openshift_token: ${{ env.OPENSHIFT_TOKEN }}
         insecure_skip_tls_verify: true
         namespace: ${{ env.OPENSHIFT_NAMESPACE }}
-        
+    
+    - name: Deploy kubernates postgres
+      run: |
+        oc apply -f ./deploy/.
+        oc expose svc/bom-order-reactjs
+    
     - name: Create and expose app
       id: deploy-and-expose
       uses: redhat-actions/oc-new-app@v1
