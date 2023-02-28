@@ -10,13 +10,13 @@ ENV PATH /app/node_modules/.bin:$PATH
 # install app dependencies
 COPY package.json ./
 COPY package-lock.json ./
-RUN yarn install
+RUN npm install
 RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
 
 # add app
 COPY . ./
 
-RUN yarn global add serve
+RUN npm install --global serve
 
 EXPOSE 8081
 # start app
