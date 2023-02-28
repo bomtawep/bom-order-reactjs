@@ -1,13 +1,19 @@
-FROM node:14 as builder
-WORKDIR /usr/src/app
-COPY package.json yarn.lock ./
-RUN yarn
+# pull official base image
+FROM node:13.12.0-alpine
+
+# set working directory
+WORKDIR /app
+
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+
+# install app dependencies
+COPY package.json ./
+COPY package-lock.json ./
+RUN npm install
+
+# add app
 COPY . ./
-RUN yarn build:production
 
-# Stage 2: Copy the JS React SPA into the Nginx HTML directory
-FROM bitnami/nginx:latest
-COPY --from=builder /usr/src/app/build /app
-
-EXPOSE 8081
-CMD ["nginx", "-g", "daemon off;"]
+# start app
+CMD ["npm", "start"]    
