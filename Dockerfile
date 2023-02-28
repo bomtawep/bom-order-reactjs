@@ -16,8 +16,6 @@ RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
 # add app
 COPY . ./
 
-RUN npm install --global serve
-
 EXPOSE 8081
 # start app
-CMD ["serve", "-s", "build"]    
+CMD ["npm", "start"]    
