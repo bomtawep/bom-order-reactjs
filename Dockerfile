@@ -9,14 +9,14 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 # install app dependencies
 COPY package.json ./
-COPY package-lock.json ./
-RUN npm install
+#COPY package-lock.json ./
+RUN yarn install
 RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
 RUN mkdir /app/build && chmod -R 777 /app/build
 
 # add app
 COPY . ./
-
+COPY webpackDevServer.config.js /node_modules/react-scripts/config/
 EXPOSE 8081
 # start app
-CMD ["npm", "start"]    
+CMD ["yarn", "start"]    
