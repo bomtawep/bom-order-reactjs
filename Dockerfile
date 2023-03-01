@@ -12,7 +12,6 @@ COPY package.json ./
 COPY package-lock.json ./
 RUN npm install
 RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
-RUN mkdir node_modules/react-scripts/config/ && chmod -R 777 node_modules/react-scripts/config/
 RUN mkdir /app/build && chmod -R 777 /app/build
 
 # add app   
