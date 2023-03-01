@@ -9,12 +9,13 @@ ENV PATH /app/node_modules/.bin:$PATH
 
 # install app dependencies
 COPY package.json ./
-#COPY package-lock.json ./
+COPY package-lock.json ./
 RUN npm install
 RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
+RUN mkdir node_modules/react-scripts/config/ && chmod -R 777 node_modules/react-scripts/config/
 RUN mkdir /app/build && chmod -R 777 /app/build
 
-# add app
+# add app   
 COPY . ./
 COPY webpackDevServer.config.js /node_modules/react-scripts/config/
 EXPOSE 8081
