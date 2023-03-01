@@ -1,5 +1,5 @@
 # pull official base image
-FROM node:13.12.0-alpine
+FROM node:13.12.0-alpine as builder
 
 # set working directory
 WORKDIR /app
@@ -16,6 +16,8 @@ RUN mkdir /app/build && chmod -R 777 /app/build
 
 # add app   
 COPY . ./
+
+RUN npm build:production
 
 FROM bitnami/nginx:latest
 COPY --from=builder /usr/src/app/build /app
