@@ -16,7 +16,10 @@ RUN mkdir /app/build && chmod -R 777 /app/build
 
 # add app   
 COPY . ./
-COPY webpackDevServer.config.js /node_modules/react-scripts/config/
+
+FROM bitnami/nginx:latest
+COPY --from=builder /usr/src/app/build /app
+
 EXPOSE 8081
 # start app
-CMD ["npm", "start"]    
+CMD ["nginx", "-g", "daemon off;"] 
