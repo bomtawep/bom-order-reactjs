@@ -21,7 +21,7 @@ RUN yarn build:production
 
 FROM bitnami/nginx:latest
 COPY --from=builder /usr/src/app/build /app
-RUN chmod -R 777 /opt/bitnami/nginx/conf/nginx.conf
+RUN chown -R nginx:nginx /opt/bitnami/nginx/conf/nginx.conf && chmod -R 777 /opt/bitnami/nginx/conf/nginx.conf
 
 EXPOSE 8081
 # start app
