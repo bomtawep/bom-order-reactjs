@@ -28,4 +28,4 @@ RUN mkdir /usr/src/app/build && chmod -R 777 /usr/src/app/build
 EXPOSE 8081
 # start app
 #CMD ["nginx", "-g", "daemon off;"] 
-RUN npm start
+CMD ["npm", "run", "start"] 
