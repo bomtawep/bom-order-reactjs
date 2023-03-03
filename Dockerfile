@@ -10,7 +10,7 @@ ENV PATH /app/node_modules/.bin:$PATH
 # install app dependencies
 COPY package.json ./
 COPY package-lock.json ./
-RUN yarn install
+RUN npm install
 RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
 RUN mkdir /usr/src/app/build && chmod -R 777 /usr/src/app/build
 #RUN yarn build
@@ -28,4 +28,4 @@ RUN mkdir /usr/src/app/build && chmod -R 777 /usr/src/app/build
 EXPOSE 8081
 # start app
 #CMD ["nginx", "-g", "daemon off;"] 
-RUN yarn start
+RUN npm start
