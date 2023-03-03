@@ -17,7 +17,7 @@ RUN mkdir /usr/src/app/build && chmod -R 777 /usr/src/app/build
 #RUN yarn install -g serve
 
 # add app   
-#COPY . ./
+COPY . ./
 
 #RUN yarn build:production
 
