@@ -13,8 +13,8 @@ COPY package-lock.json ./
 RUN npm install
 RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
 RUN mkdir /usr/src/app/build && chmod -R 777 /usr/src/app/build
-RUN npm run build
-RUN npm install -g serve
+RUN yarn build
+RUN yarn install -g serve
 
 # add app   
 #COPY . ./
