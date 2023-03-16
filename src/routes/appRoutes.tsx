@@ -11,10 +11,10 @@ import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import AppsOutlinedIcon from '@mui/icons-material/AppsOutlined';
 import ArticleOutlinedIcon from '@mui/icons-material/ArticleOutlined';
 import FormatListBulletedOutlinedIcon from '@mui/icons-material/FormatListBulletedOutlined';
-import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+//import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import AlertPage from "../pages/component/AlertPage";
 import ButtonPage from "../pages/component/ButtonPage";
-import InstallationPage from "../pages/installation/InstallationPage";
+//import InstallationPage from "../pages/installation/InstallationPage";
 import DocumentationPage from "../pages/documentation/DocumentationPage";
 import HomeIcon from '@mui/icons-material/Home';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
@@ -69,7 +69,7 @@ const appRoutes: RouteType[] = [
       }
     ]
   },
-  {
+  /*{
     path: "/installation",
     element: <InstallationPage />,
     state: "installation",
@@ -77,7 +77,7 @@ const appRoutes: RouteType[] = [
       displayText: "Installation",
       icon: <FileDownloadOutlinedIcon />
     }
-  },
+  },*/
   {
     path: "/dashboard",
     element: <DashboardPageLayout />,
